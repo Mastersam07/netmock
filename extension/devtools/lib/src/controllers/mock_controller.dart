@@ -53,9 +53,23 @@ class MockController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateMockedResponse(NetworkRequest request, String newBody) {
+  void updateMockedResponse(
+    NetworkRequest request, {
+    required String newBody,
+    required int statusCode,
+    required int delay,
+  }) {
     request.mockedResponseBody = newBody;
-    _sendToApp('netmock.updateMock', {'id': request.id, 'body': newBody});
+    // We don't store status code/delay on the request object for display yet,
+    // as those are "mock settings" separate from the original request.
+    // But we send them to the app.
+
+    _sendToApp('netmock.updateMock', {
+      'id': request.id,
+      'body': newBody,
+      'statusCode': statusCode,
+      'delay': delay,
+    });
     notifyListeners();
   }
 

@@ -14,30 +14,37 @@ class NetmockClient {
   bool get isMockingEnabled => _isMockingEnabled;
   bool get isRecording => _isRecording;
 
-  void initialize() {
-    _registerServiceExtensions();
-  }
+  void initialize() => _registerServiceExtensions();
 
   void _registerServiceExtensions() {
     // Register service extensions for DevTools communication
-    developer.registerExtension('netmock.setMocking',
-        (method, parameters) async {
+    developer.registerExtension('netmock.setMocking', (
+      method,
+      parameters,
+    ) async {
       _isMockingEnabled = parameters['enabled'] == 'true';
       return developer.ServiceExtensionResponse.result('{"result": "ok"}');
     });
 
-    developer.registerExtension('netmock.setRecording',
-        (method, parameters) async {
+    developer.registerExtension('netmock.setRecording', (
+      method,
+      parameters,
+    ) async {
       _isRecording = parameters['enabled'] == 'true';
       return developer.ServiceExtensionResponse.result('{"result": "ok"}');
     });
 
-    developer.registerExtension('netmock.updateMock',
-        (method, parameters) async {
+    developer.registerExtension('netmock.updateMock', (
+      method,
+      parameters,
+    ) async {
       final id = parameters['id'];
       final body = parameters['body'];
+      final statusCode = int.tryParse(parameters['statusCode'] ?? '');
+      final delay = int.tryParse(parameters['delay'] ?? '');
+
       if (id != null) {
-        _mocks[id] = {'body': body};
+        _mocks[id] = {'body': body, 'statusCode': ?statusCode, 'delay': ?delay};
       }
       return developer.ServiceExtensionResponse.result('{"result": "ok"}');
     });
