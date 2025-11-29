@@ -1,0 +1,5 @@
+name: netmock
+issueTracker: https://github.com/Mastersam07/netmock/issues
+version: 0.1.0
+materialIconCodePoint: 0xe6e1
+requiresConnection: true
